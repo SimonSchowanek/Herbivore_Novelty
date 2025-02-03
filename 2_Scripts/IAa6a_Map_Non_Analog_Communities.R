@@ -10,11 +10,10 @@
         #
         # Output: a table indicating which cells are non-analogue and a map visualising the results
         # time: needs 20 min to run.
-        # Status: Ready
+        # Status: Ready (2025/02/03), but see notes
         # Note: This scrips used large matrices (2-10 Gb). This is heavier than R can work with. Therefore we use the Bigmemory package.
         #       This package requires loading the csv file distance matrix. This takes long the first time, but should be quicker afterwards.
         #
-        #   I ran this script on 2025/02/03
         #
         #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -62,6 +61,8 @@ library(raster)
 library(ggplot2)
 library(ggfortify)
 library("rworldmap") # visualisation data
+library(geodata)
+
 
 # For plotting
 #–––––––––––––––––––––––––––––––––––––––––––––––––
@@ -369,7 +370,7 @@ pie(rep(1,length(colours.final)), col=colours.final)
 
 
 
-## DISCRETE 2024 NORMAL VERSION 
+## DISCRETE 2025 NORMAL VERSION 
 #–––––––––––––––––––––––––––––––––––––––––––––––––
 
 ## Turn the continuous dissimilarity values into bins
@@ -462,7 +463,7 @@ dev.off()
 
 
 
-## DISCRETE 2024 CONSERVATIVE VERSION 
+## DISCRETE 2025 CONSERVATIVE VERSION 
 #–––––––––––––––––––––––––––––––––––––––––––––––––
 
 ## Turn the continuous dissimilarity values into bins
@@ -580,7 +581,7 @@ dev.off()
 
 
 
-## DISCRETE 2024 LIBERAL VERSION 
+## DISCRETE 2025 LIBERAL VERSION 
 #–––––––––––––––––––––––––––––––––––––––––––––––––
 
 ## Turn the continuous dissimilarity values into bins
@@ -703,10 +704,27 @@ dev.off()
 
 # – Load Data ####
 #––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-r <- getData("worldclim",var="bio",res=10)
-#Bio 1 and Bio12 are mean anual temperature and anual precipitation:
+
+
+    #~~~~~ NOTE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    #       
+    #   2025/02/03: This section used the Raster package, which no longer seems to work. I have adapted the script so that it runs again.
+    #               The end result should be identical but I am leaving this note here for future reference
+    # 
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# Create directory to save data
+if(!dir.exists(paste0("3_Output/IAa6_Map_Non_Analog_Communities/climate_data"))){ # create directory
+  dir.create(paste0("3_Output/IAa6_Map_Non_Analog_Communities/climate_data"))}
+
+
+# Download WorldClim bioclimatic data at 10-minute resolution (~18 km)
+r <- worldclim_global(var = "bio", res = 10, path = "3_Output/IAa6_Map_Non_Analog_Communities/climate_data")
+
+
+#Bio 1 and Bio12 are mean anual temperature and anual precipitation:(https://wec.wur.nl/r/spatial/raster-data.html)
 r <- r[[c(1,12)]]
-names(r) <- c("Temp","Prec")
+names(r) <- c("Temp","Prec") # give names.
 
 
 ## – Set parameters ####
@@ -718,9 +736,6 @@ theme_set(theme_bw()) # set ggplot layout
 ## – Correct data ####
 #–––––––––––––––––––––––––––––––––––––––––––––––––
 
-## Correct for the scaling factor that WorldClim uses
-r$Temp = r$Temp/10
-
 # Ecosystems uncertain were mapped for all pixels with MAP > 7.143 MAT + 286 and MAP < –1.469 MAT2 + 81.665 MAT + 475
 Con1 = r$Prec > 7.143 * r$Temp + 286
 Con2 = r$Prec < -1.469 * r$Temp^2 + 81.665 * r$Temp + 475
@@ -731,13 +746,22 @@ r.combined = Con1 + Con2
 r.combined = r.combined >= 2 # select areas that meet both conditions
 plot(r.combined) # Uncertain Areas
 
-## Reproject Uncertain Areas 
-r.uncertain.repr = projectRaster(from = r.combined, to = raster.example, crs = crs(raster.example), res = res(raster.example)) 
+
+library(terra)
+# Reproject r.combined to match raster.example
+r.uncertain.repr <- project(r.combined, raster.example)
+
+# Check the output
+print(r.uncertain.repr)
+plot(r.uncertain.repr[[1]])  # Plot first layer
+
 r.uncertain.repr = r.uncertain.repr > 0 # include uncertain areas
 plot(r.uncertain.repr)
 
+
+
 # Add variable to indicate which cells are uncertain
-v.uncertain.repr = as.numeric(getValues(r.uncertain.repr))
+v.uncertain.repr = as.numeric(values(r.uncertain.repr))
 df.current$Uncertain = v.uncertain.repr[df.current$Original.Cell]
 
 # make changes so that area that lost all herbivores and had uncertain ecosystems are also included.
@@ -820,3 +844,4 @@ dev.off()
 #–––––––––––––––––––––––––––––––––––––––––––––––––
 end_time <- Sys.time()
 end_time - start_time
+
