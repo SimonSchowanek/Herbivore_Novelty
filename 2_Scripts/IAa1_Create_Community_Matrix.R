@@ -43,9 +43,9 @@ start_time <- Sys.time() # Save Time
 
 # – Load data ####
 #––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-herbivores = read.csv("/Users/au572919/Research/I_MegaPast2Future/HerbiTraits/Data/Version_1.1/HerbiTraits_1.1/HerbiTraits_1.1.csv") # herbitraits (https://github.com/MegaPast2Future/HerbiTraits)
-raster_base = raster("/Users/au572919/Datasets/Phylacine.1.2/Data/Ranges/Current/Abditomys_latidens.tif") # example raster from PHYLACINE (https://megapast2future.github.io/PHYLACINE_1.2/)
-spatial.metadata = read.csv("/Users/au572919/Datasets/Phylacine.1.2/Data/Ranges/Spatial_metadata.csv") # spatial metadata from PHYLACINE
+herbivores = read.csv("./1_Input/HerbiTraits_1.1/HerbiTraits_1.1.csv") # herbitraits (https://github.com/MegaPast2Future/HerbiTraits)
+raster_base = raster("./1_Input/Phylacine.1.2/Data/Ranges/Current/Abditomys_latidens.tif") # example raster from PHYLACINE (https://megapast2future.github.io/PHYLACINE_1.2/)
+spatial.metadata = read.csv("./1_Input/Phylacine.1.2/Data/Ranges/Spatial_metadata.csv") # spatial metadata from PHYLACINE
 
 # – Correct data ####
 #––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––

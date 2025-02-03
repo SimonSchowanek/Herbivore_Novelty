@@ -85,8 +85,8 @@ functional.community.matrix.relative = functional.community.matrix.relative[,!(c
 
 # Spatial
 #–––––––––––––––––––––––––––––––––––––––––––––––––
-raster.example = raster("~/Datasets/PHYLACINE_V1_2_1/Ranges/Present_natural/Stegodon_orientalis.tif") # an example raster from PHYLACINE
-biogeo.realms = readOGR("/Users/au572919/Datasets/Biogeographical_Realms/udvardy/udvardy_py.shp")  # Shapefile of the biogeographical relams https://data-gis.unep-wcmc.org/portal/home/item.html?id=7f3a055f36104f36b6dd7834ebe2cf45
+raster.example = raster("./1_Input/PHYLACINE_V1_2_1/Ranges/Present_natural/Stegodon_orientalis.tif") # an example raster from PHYLACINE
+biogeo.realms = readOGR("./1_Input/Biogeographical_Realms/udvardy/udvardy_py.shp")  # Shapefile of the biogeographical relams https://data-gis.unep-wcmc.org/portal/home/item.html?id=7f3a055f36104f36b6dd7834ebe2cf45
 herbivomes = readOGR("./1_Input/Herbivome_Polygons.shp") # the herbivomes shapefile
 
 

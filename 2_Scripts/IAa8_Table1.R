@@ -67,7 +67,7 @@ functional.community.matrix.pres.abs = functional.community.matrix.pres.abs[,!(c
 
 herbivores.4 = read.csv("./3_Output/IAa2_Manual_Functional_Groups/IAa2_herbivores.csv")
 
-raster.example = raster("~/Datasets/PHYLACINE_V1_2_1/Ranges/Current/Abditomys_latidens.tif")
+raster.example = raster("./1_Input/PHYLACINE_V1_2_1/Ranges/Current/Abditomys_latidens.tif")
 
 
 ## – Directories  ####

@@ -61,8 +61,8 @@ community.matrix.Hempson = read.csv("3_Output/IAa1_Create_Community_Matrices/IAa
 community.matrix.Hempson = community.matrix.Hempson[,!(colnames(community.matrix.Hempson) %in% c("X","CellNr"))] # remove two redundant variables
 
 # Spatial
-raster.example = raster("~/Datasets/PHYLACINE_V1_2_1/Ranges/Present_natural/Stegodon_orientalis.tif") # example raster from PHYLACINE
-biogeo.realms = readOGR("/Users/au572919/Datasets/Biogeographical_Realms/udvardy/udvardy_py.shp") # Shapefile of the biogeographical relams https://data-gis.unep-wcmc.org/portal/home/item.html?id=7f3a055f36104f36b6dd7834ebe2cf45
+raster.example = raster("./1_Input/PHYLACINE_V1_2_1/Ranges/Present_natural/Stegodon_orientalis.tif") # example raster from PHYLACINE
+biogeo.realms = readOGR("./1_Input/Biogeographical_Realms/udvardy/udvardy_py.shp") # Shapefile of the biogeographical relams https://data-gis.unep-wcmc.org/portal/home/item.html?id=7f3a055f36104f36b6dd7834ebe2cf45
 
 # – Correct data ####
 #––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
