@@ -5,15 +5,15 @@
 #                                                                    #
 ######################################################################!
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# METADATA
-# This script selects and appropriate number of clusters and then classifies herbivores into said amount of clusters (functional groups)
-#
-# Output: a herbivores traits file that also includes which cluster they belong to
-# time: needs less than 1 min to run.
-# Status: Ready
-# Note: I ran this script on 2025/02/03
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      # METADATA
+      # This script selects and appropriate number of clusters and then classifies herbivores into said amount of clusters (functional groups)
+      #
+      # Output: a herbivores traits file that also includes which cluster they belong to
+      # time: needs less than 1 min to run.
+      # Status: Ready (2025/02/03)
+      # Note: 
+      #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––####
 ##### 1. PREPARING THE DATA ##### 

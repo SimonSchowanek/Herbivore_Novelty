@@ -10,11 +10,11 @@
         #
         # Output: a table indicating which cells are non-analogue and a map visualising the results
         # time: needs 20 min to run.
-        # Status: Ready, Dasypus bellis has been removed (23/01/2020)
+        # Status: Ready
         # Note: This scrips used large matrices (2-10 Gb). This is heavier than R can work with. Therefore we use the Bigmemory package.
         #       This package requires loading the csv file distance matrix. This takes long the first time, but should be quicker afterwards.
         #
-        #   I ran this script on 2024/04/29
+        #   I ran this script on 2025/02/03
         #
         #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -84,9 +84,9 @@ functional.community.matrix.relative = functional.community.matrix.relative[,!(c
 
 # Spatial
 #–––––––––––––––––––––––––––––––––––––––––––––––––
-raster.example = raster("~/Datasets/PHYLACINE_V1_2_1/Ranges/Current/Abditomys_latidens.tif")
-biogeo.realms = readOGR("/Users/au572919/Datasets/Biogeographical_Realms/udvardy/udvardy_py.shp")
-herbivomes = readOGR("./1_files/Herbivome_Polygons.shp")
+raster.example = raster("~/Datasets/PHYLACINE_V1_2_1/Ranges/Present_natural/Stegodon_orientalis.tif") # an example raster from PHYLACINE
+biogeo.realms = readOGR("/Users/au572919/Datasets/Biogeographical_Realms/udvardy/udvardy_py.shp")  # Shapefile of the biogeographical relams https://data-gis.unep-wcmc.org/portal/home/item.html?id=7f3a055f36104f36b6dd7834ebe2cf45
+herbivomes = readOGR("./1_Input/Herbivome_Polygons.shp") # the herbivomes shapefile
 
 
 
@@ -107,7 +107,7 @@ dim(big.distance.matrix)
         # – Load Functions ####
         #––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 
-source("./2_scripts/Scripts_2020_12_10/Functions/I_F1_Realm_Distances.R")
+source("./2_scripts/Functions/I_F1_Realm_Distances.R")
 
 # Define function 
 #–––––––––––––––––––––––––––––––––––––––––––––––––
@@ -149,6 +149,14 @@ df.master = df.master[which(df.master$Herbivores.Present == 1),]
 
 df.pn = df.master[which(df.master$Scenario == "Present-Natural"),]
 df.current = df.master[df.master$Scenario == "Current",]
+
+
+
+## – Directories  ####
+#–––––––––––––––––––––––––––––––––––––––––––––––––
+if(!dir.exists(paste0("./3_Output/IAa6_Map_Non_Analog_Communities"))){
+  dir.create(paste0("./3_Output/IAa6_Map_Non_Analog_Communities"))}
+
 
 #–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––####
 ##### 3. DIVIDE DISTANCE MATRIX ##### 
@@ -806,234 +814,6 @@ dev.off()
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# #–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––####
-# ##### 7. GLOBALLY NON-ANALOGUE  ##### 
-# #–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––####
-# 
-# PN.vs.PN.subset.normal.matrix = as.matrix(PN.vs.PN)
-# Current.vs.PN.subset.normal.matrix = as.matrix(Current.vs.PN)
-# 
-# ## PN VS PN
-# system.time(Quantile.PN.vs.PN.95.perc <- quantile(PN.vs.PN.subset.normal.matrix,0.95, na.rm = T))
-# Quantile.PN.vs.PN.95.perc
-# 
-# system.time(Quantile.PN.vs.PN.90.perc <- quantile(PN.vs.PN.subset.normal.matrix,0.90, na.rm = T))
-# Quantile.PN.vs.PN.90.perc
-# 
-# system.time(Quantile.PN.vs.PN.69.perc <- quantile(PN.vs.PN.subset.normal.matrix,0.69, na.rm = T))
-# Quantile.PN.vs.PN.69.perc # 69% of all distances is smaller than 0.97%
-# 
-# 
-# 
-# ## Current VS PN
-# system.time(Quantile.Current.vs.PN.95.perc <- quantile(Current.vs.PN.subset.normal.matrix,0.95, na.rm = T))
-# Quantile.Current.vs.PN.95.perc
-# 
-# system.time(Quantile.Current.vs.PN.90.perc <- quantile(Current.vs.PN.subset.normal.matrix,0.90, na.rm = T))
-# Quantile.Current.vs.PN.90.perc
-# 
-# system.time(Quantile.Current.vs.PN.69.perc <- quantile(Current.vs.PN.subset.normal.matrix,0.69, na.rm = T))
-# Quantile.Current.vs.PN.69.perc
-# 
-#     #~~~~~~ EXPLANATION ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#     # 
-#     # Within all PN cells, 95% of the distances are smaller than 1.563564 ( = Quantile.PN.vs.PN.95.perc). 
-#     # If Current.VS.PN are even more "distant" it means they are effectively "Globally Novel".        
-#     #
-#     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# 
-#     # How many cells are non-analogue (without islands) 
-#     df.current[,"threshold.value"] = 0.55
-# df.current[which(df.current$Distance.from.pn > Quantile.PN.vs.PN.95.perc),"threshold.value"] = 1
-# sum(df.current$threshold.value)/nrow(df.pn) #
-# round(sum(df.current$threshold.value)/length(df.current$threshold.value),2)
-# 
-# # How many cells are non-analogue (with islands) 
-# cell.that.lost.all.herbivores = length(which(!(df.pn$Original.Cell %in% df.current$Original.Cell)))
-# df.current[,"threshold.value"] = 0
-# df.current[which(df.current$Distance.from.pn > Quantile.PN.vs.PN.90.perc),"threshold.value"] = 1
-# non.analogue.cells.perc = (sum(df.current$threshold.value) + cell.that.lost.all.herbivores)/nrow(df.pn) #
-# round(non.analogue.cells.perc,2)    
-# 
-# 
-# #–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––####
-# ##### 8. REGIONAL NON-ANALOGUE  ##### 
-# #–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––####
-# 
-# 
-# ## Present-Natural Distances for all biogeographical realms
-# #–––––––––––––––––––––––––––––––––––––––––––––––––
-# 
-# df.quantiles.realms = data.frame(matrix(NA,6,3))
-# colnames(df.quantiles.realms) = c("realm", "threshold.69%", "threshold.95%")
-# df.quantiles.realms$realm = c("Africotropical", "Indomalayan", "Palaearctic", "Nearctic", "Neotropical", "Australasian")
-# 
-#         #~~~~~~ EXPLANATION ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#         # 
-#         #   This section shows how heterogeneous PN assemblages would be (within the same biogeograhical realm)
-#         #   
-#         #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# 
-# matches = which(df.pn$Biogeo.realm == "Africotropical")
-# dist.PN.Africotropical = PN.vs.PN.with.NA[matches,matches]
-# hist(dist.PN.Africotropical)
-# df.quantiles.realms[which((df.quantiles.realms$realm == "Africotropical")), "threshold.69%"] = quantile(dist.PN.Africotropical,0.69, na.rm = T)
-# df.quantiles.realms[which((df.quantiles.realms$realm == "Africotropical")), "threshold.95%"] = quantile(dist.PN.Africotropical,0.95, na.rm = T)
-# 
-# matches = which(df.pn$Biogeo.realm == "Indomalayan")
-# dist.PN.Indomalayan = PN.vs.PN.with.NA[matches,matches]
-# hist(dist.PN.Indomalayan)
-# df.quantiles.realms[which((df.quantiles.realms$realm == "Indomalayan")), "threshold.69%"] = quantile(dist.PN.Indomalayan,0.69, na.rm = T)
-# df.quantiles.realms[which((df.quantiles.realms$realm == "Indomalayan")), "threshold.95%"] = quantile(dist.PN.Indomalayan,0.95, na.rm = T)
-# 
-# matches = which(df.pn$Biogeo.realm == "Palaearctic")
-# dist.PN.Palaearctic = PN.vs.PN.with.NA[matches,matches]
-# hist(dist.PN.Palaearctic)
-# df.quantiles.realms[which((df.quantiles.realms$realm == "Palaearctic")), "threshold.69%"] = quantile(dist.PN.Palaearctic,0.69, na.rm = T)
-# df.quantiles.realms[which((df.quantiles.realms$realm == "Palaearctic")), "threshold.95%"] = quantile(dist.PN.Palaearctic,0.95, na.rm = T)
-# 
-# matches = which(df.pn$Biogeo.realm == "Nearctic")
-# dist.PN.Nearctic = PN.vs.PN.with.NA[matches,matches]
-# hist(dist.PN.Nearctic)
-# df.quantiles.realms[which((df.quantiles.realms$realm == "Nearctic")), "threshold.69%"] = quantile(dist.PN.Nearctic,0.69, na.rm = T)
-# df.quantiles.realms[which((df.quantiles.realms$realm == "Nearctic")), "threshold.95%"] = quantile(dist.PN.Nearctic,0.95, na.rm = T)
-# 
-# 
-# matches = which(df.pn$Biogeo.realm == "Neotropical")
-# dist.PN.Neotropical = PN.vs.PN.with.NA[matches,matches]
-# hist(dist.PN.Neotropical)
-# df.quantiles.realms[which((df.quantiles.realms$realm == "Neotropical")), "threshold.69%"] = quantile(dist.PN.Neotropical,0.69, na.rm = T)
-# df.quantiles.realms[which((df.quantiles.realms$realm == "Neotropical")), "threshold.95%"] = quantile(dist.PN.Neotropical,0.95, na.rm = T)
-# 
-# 
-# matches = which(df.pn$Biogeo.realm == "Australasian")
-# dist.PN.Australasian = PN.vs.PN.with.NA[matches,matches]
-# hist(dist.PN.Australasian)
-# df.quantiles.realms[which((df.quantiles.realms$realm == "Australasian")), "threshold.69%"] = quantile(dist.PN.Australasian,0.69, na.rm = T)
-# df.quantiles.realms[which((df.quantiles.realms$realm == "Australasian")), "threshold.95%"] = quantile(dist.PN.Australasian,0.95, na.rm = T)
-# 
-# ## Current Distances vs Present-Natural -  for all biogeographical realms
-# #–––––––––––––––––––––––––––––––––––––––––––––––––
-# 
-# ## Create New Variables
-# df.current[,"regionally.novel"] = 0
-# 
-# ## Africotropical
-# realm = "Africotropical" # Select Realm
-# df.temp = df.current[which(df.current$Biogeo.realm == realm),] # Make new Df
-# matches = which(df.temp[, "Distance.from.pn"] >= df.quantiles.realms[which(df.quantiles.realms$realm == realm), "threshold.69%"]) ## Identify Regionally Novel Assemblages
-# df.temp[matches, "regionally.novel"] = 1
-# matches = which(df.temp[, "Distance.from.pn"] >= df.quantiles.realms[which(df.quantiles.realms$realm == realm), "threshold.95%"]) ## Identify Regionally Novel Assemblages
-# df.temp[matches, "regionally.novel"] = 2
-# df.current[which(df.current$Biogeo.realm == realm),"regionally.novel"] = df.temp$regionally.novel ## Overwrite the original df
-# 
-# ## Indomalayan
-# realm = "Indomalayan" # Select Realm
-# df.temp = df.current[which(df.current$Biogeo.realm == realm),] # Make new Df
-# matches = which(df.temp[, "Distance.from.pn"] >= df.quantiles.realms[which(df.quantiles.realms$realm == realm), "threshold.69%"]) ## Identify Regionally Novel Assemblages
-# df.temp[matches, "regionally.novel"] = 1
-# matches = which(df.temp[, "Distance.from.pn"] >= df.quantiles.realms[which(df.quantiles.realms$realm == realm), "threshold.95%"]) ## Identify Regionally Novel Assemblages
-# df.temp[matches, "regionally.novel"] = 2
-# df.current[which(df.current$Biogeo.realm == realm),"regionally.novel"] = df.temp$regionally.novel ## Overwrite the original df
-# 
-# ## Palaearctic
-# realm = "Palaearctic" # Select Realm
-# df.temp = df.current[which(df.current$Biogeo.realm == realm),] # Make new Df
-# matches = which(df.temp[, "Distance.from.pn"] >= df.quantiles.realms[which(df.quantiles.realms$realm == realm), "threshold.69%"]) ## Identify Regionally Novel Assemblages
-# df.temp[matches, "regionally.novel"] = 1
-# matches = which(df.temp[, "Distance.from.pn"] >= df.quantiles.realms[which(df.quantiles.realms$realm == realm), "threshold.95%"]) ## Identify Regionally Novel Assemblages
-# df.temp[matches, "regionally.novel"] = 2
-# df.current[which(df.current$Biogeo.realm == realm),"regionally.novel"] = df.temp$regionally.novel ## Overwrite the original df
-# 
-# ## Nearctic
-# realm = "Nearctic" # Select Realm
-# df.temp = df.current[which(df.current$Biogeo.realm == realm),] # Make new Df
-# matches = which(df.temp[, "Distance.from.pn"] >= df.quantiles.realms[which(df.quantiles.realms$realm == realm), "threshold.69%"]) ## Identify Regionally Novel Assemblages
-# df.temp[matches, "regionally.novel"] = 1
-# matches = which(df.temp[, "Distance.from.pn"] >= df.quantiles.realms[which(df.quantiles.realms$realm == realm), "threshold.95%"]) ## Identify Regionally Novel Assemblages
-# df.temp[matches, "regionally.novel"] = 2
-# df.current[which(df.current$Biogeo.realm == realm),"regionally.novel"] = df.temp$regionally.novel ## Overwrite the original df
-# 
-# ## Neotropical
-# realm = "Neotropical" # Select Realm
-# df.temp = df.current[which(df.current$Biogeo.realm == realm),] # Make new Df
-# matches = which(df.temp[, "Distance.from.pn"] >= df.quantiles.realms[which(df.quantiles.realms$realm == realm), "threshold.69%"]) ## Identify Regionally Novel Assemblages
-# df.temp[matches, "regionally.novel"] = 1
-# matches = which(df.temp[, "Distance.from.pn"] >= df.quantiles.realms[which(df.quantiles.realms$realm == realm), "threshold.95%"]) ## Identify Regionally Novel Assemblages
-# df.temp[matches, "regionally.novel"] = 2
-# df.current[which(df.current$Biogeo.realm == realm),"regionally.novel"] = df.temp$regionally.novel ## Overwrite the original df
-# 
-# ## Australasia
-# realm = "Australasian" # Select Realm
-# df.temp = df.current[which(df.current$Biogeo.realm == realm),] # Make new Df
-# matches = which(df.temp[, "Distance.from.pn"] >= df.quantiles.realms[which(df.quantiles.realms$realm == realm), "threshold.69%"]) ## Identify Regionally Novel Assemblages
-# df.temp[matches, "regionally.novel"] = 1
-# matches = which(df.temp[, "Distance.from.pn"] >= df.quantiles.realms[which(df.quantiles.realms$realm == realm), "threshold.95%"]) ## Identify Regionally Novel Assemblages
-# df.temp[matches, "regionally.novel"] = 2
-# df.current[which(df.current$Biogeo.realm == realm),"regionally.novel"] = df.temp$regionally.novel ## Overwrite the original df
-# 
-# 
-# ## Current Distances vs Present-Natural -  for all biogeographical realms
-# #–––––––––––––––––––––––––––––––––––––––––––––––––
-# 
-# colours.final = c("#999999", "#E69F00", "firebrick")
-# 
-# (p2 = ggplot(data=df.current, aes(y=Latitude, x=Longitude, fill = as.factor(regionally.novel)), color =  as.factor(regionally.novel)) +
-#     geom_tile(size=0.5) +
-#     scale_fill_manual(values = colours.final,
-#                           drop = F,
-#                       labels = c("analog", "non-analog (69%)", "non-analog (95%)")) +
-#     scale_colour_manual(values = colours.final) +
-#     geom_polygon(data = countries.poly, 
-#                  aes(x = long, 
-#                      y = lat, 
-#                      group = group),
-#                  fill = NA, 
-#                  colour = 'gray10', 
-#                  size = 0.3) +
-#     coord_fixed() +
-#     theme_void()  +
-#     #    ggtitle("Current VS present-natural") + # add title
-#     labs(x="", y="", fill = "Dissimilarity") +
-#     theme(plot.title = element_text("sans", "plain", "Black", 18, hjust = 0.5),
-#           legend.title = element_blank(),
-#           legend.key = element_rect(color = NA),
-#           legend.key.height = unit(1.5, 'cm'), #change legend key height
-#           legend.key.width = unit(1.5, 'cm'), #change legend key width
-#           legend.text = element_text(size=15),
-#           legend.position = c(0.1, 0.3),
-#           axis.ticks = element_blank(),
-#           axis.text = element_blank(),
-#           legend.background = element_blank()) +
-#     geom_tile(data=Areas.that.lost.all.herbivores, aes(y=Latitude, x=Longitude), inherit.aes = F, colour ="black", fill = "black"))
-# 
-# 
-# ## Save TIFF
-# png(width=1400,height=700, file = "./3_Output/IAa6_Map_Non_Analog_Communities/IAa6b_non_analogues_communities_regionally_novel.png")
-# p2
-# dev.off()
-# 
-# 
-# 
-# ## Plot differences
-# hist(Current.vs.PN.subset.normal.matrix, col = rgb(0,0,1,0.5), xlab = "Squared Chord Distance", main = "Distances 'PN vs PN' and 'Current vs PN'") # blue
-# hist(PN.vs.PN.subset.normal.matrix, col = rgb(1,0,0,0.5), add = T) # red
-# abline(v = 0.55, col = "black", add = T, lwd = 4, lty = "dashed")
 
 
 ## – End Time ####

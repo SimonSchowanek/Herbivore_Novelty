@@ -9,12 +9,11 @@
     # This script loads the earlier saved Hempson distance matrix and determines how dissimilar the different Hempson herbivomes are.
     #
     # Output: a table indicating giving the median Squared Chord Distances between and within the cells of different Hempson Herbivomes.
-    # time: needs 1 min to run.
-    # Status: Ready (2021/01/05)
+    # time: needs less than 1 min to run.
+    # Status: Ready (2025/02/03)
     # Note: This scrips used large matrices (2-10 Gb). This is heavier than R can work with. Therefore we use the Bigmemory package.
     #       This package requires loading the csv file distance matrix. This takes long the first time, but should be quicker afterwards.
     #
-    #         I ran this script on 2025/02/03
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––####
@@ -90,9 +89,9 @@ functional.community.matrix.relative = functional.community.matrix.relative[,!(c
 
 # Spatial
 #–––––––––––––––––––––––––––––––––––––––––––––––––
-raster.example = raster("~/Datasets/PHYLACINE_V1_2_1/Ranges/Present_natural/Stegodon_orientalis.tif")
-biogeo.realms = readOGR("/Users/au572919/Datasets/Biogeographical_Realms/udvardy/udvardy_py.shp")
-herbivomes = readOGR("./1_files/Herbivome_Polygons.shp")
+raster.example = raster("~/Datasets/PHYLACINE_V1_2_1/Ranges/Present_natural/Stegodon_orientalis.tif") # an example raster from PHYLACINE
+biogeo.realms = readOGR("/Users/au572919/Datasets/Biogeographical_Realms/udvardy/udvardy_py.shp")  # Shapefile of the biogeographical relams https://data-gis.unep-wcmc.org/portal/home/item.html?id=7f3a055f36104f36b6dd7834ebe2cf45
+herbivomes = readOGR("./1_Input/Herbivome_Polygons.shp") # the herbivomes shapefile
 
 # Attach (= load) the big distance matrix
 #–––––––––––––––––––––––––––––––––––––––––––––––––
@@ -108,7 +107,12 @@ dim(big.distance.matrix)
 # – Load Functions ####
 #––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 
-source("./2_scripts/Scripts_2020_12_10/Functions/I_F1_Realm_Distances.R")
+
+#––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+# – Load Functions ####
+#––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+
+source("./2_scripts/Functions/I_F1_Realm_Distances.R")
 
 # Define function 
 #–––––––––––––––––––––––––––––––––––––––––––––––––
@@ -360,4 +364,3 @@ write.csv(similarities.df, "./3_Output/IAa5_Calculate_Distances_Herbivomes/IAa5a
 end_time <- Sys.time()
 end_time - start_time
 
-similarities.df

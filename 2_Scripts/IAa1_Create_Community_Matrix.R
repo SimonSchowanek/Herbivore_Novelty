@@ -10,8 +10,8 @@
     #
     # Output: one current and one present natural community matrix
     # Time: needs 2 min to run.
-    # Status: Ready, Dasypus bellis has been removed (23/01/2020)
-    # NOTES: I ran this script on 2025/02/03
+    # Status: Ready (2025/02/03)
+    # NOTES: Dasypus bellis has been removed based on diet.
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
@@ -204,7 +204,7 @@ write.csv( x= Community_Matrix_Current,
 
       # ~~~ EXPLANATION ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       #  
-      #   In Aa9 we caclulate how different the Hempson et al. (2015) herbivomes are from each other. Therefore we need a community matrix that 
+      #   We caclulate how different the Hempson et al. (2015) herbivomes are from each other. Therefore we need a community matrix that 
       #   is comparable to the community matrices that Hempson made. Hempson et al. (2015) use the current ranges for African herbivores. However,
       #   they modify the range of Giraffa_camelopardalis, Diceros_bicornis, Ceratotherium_simum and Equus_zebra so they better reflect the historical distributions.
       #   We (visually) compared the current and present-natural ranges of these species, and the Hempson modified range best match the present-natural ranges.

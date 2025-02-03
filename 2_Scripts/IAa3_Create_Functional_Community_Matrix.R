@@ -9,10 +9,10 @@
     # This takes functional groups and community matrix and makes a community matrix of functional groups
     # Output: a herbivores traits file that also includes which cluster they belong to
     # time: 18s to run.
-    # Status: Ready
+    # Status: Ready (2025/02/03)
     # Note: 
     #       We also update the species community matrix so it includes spatial metadata.
-    #       I ran this script on 2025/02/03
+    #
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
 
