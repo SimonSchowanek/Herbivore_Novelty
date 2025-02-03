@@ -1,6 +1,6 @@
 # Code And Data for "The late-Quaternary Extinctions Gave Rise To Functionally Novel Herbivore Assemblages
 
-This repository contains the code and data for the paper "The late-Quaternary Extinctions Gave Rise To Functionally Novel Herbivore Assemblages, published in Ecology and Evolution. 
+This repository contains the code and data for the paper "The late-Quaternary Extinctions Gave Rise To Functionally Novel Herbivore Assemblages.
 
 For the script to work, the user needs to download the following datasets and include them in the folder called 1_Input (or specify their own filepath)
 
